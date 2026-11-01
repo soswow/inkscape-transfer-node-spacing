@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2026 soswow. SPDX-License-Identifier: GPL-3.0-or-later -->
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <name>Transfer Node Spacing</name>
+    <id>org.inkscape.user.transfer_node_spacing</id>
+    <param name="tab" type="notebook">
+        <page name="transfer" gui-text="Transfer">
+            <param name="distance_mode" type="optiongroup" appearance="combo" gui-text="Distance mode:" gui-description="Absolute keeps the measured lengths. Proportional stretches them so the spacing path's full length fits the curve.">
+                <option value="absolute">Same arc length from the start</option>
+                <option value="proportional">Scale spacing to the curve length</option>
+            </param>
+            <param name="source_end" type="optiongroup" appearance="radio" gui-text="Measure spacing from:" gui-description="Which end of the spacing path counts as distance zero, and as node 1. The spacing path itself is not changed.">
+                <option value="start">First node</option>
+                <option value="end">Last node</option>
+            </param>
+            <param name="target_end" type="optiongroup" appearance="radio" gui-text="Add nodes on the curve from:" gui-description="Which end of the curve receives the first distance, and is numbered 1. Last node also reverses the curve.">
+                <option value="start">First node</option>
+                <option value="end">Last node</option>
+            </param>
+            <separator/>
+            <label appearance="header">Debugging</label>
+            <param indent="1" name="number_nodes" type="bool" gui-text="Number nodes" gui-description="Black dots at each node of both paths. Node 1 is the end chosen above, so the same number is the same distance on both paths.">false</param>
+            <param indent="1" name="segment_lengths" type="bool" gui-text="Segment lengths" gui-description="Arc length of each segment, at the middle of that segment, on both paths.">false</param>
+            <param indent="1" name="unit" type="optiongroup" appearance="combo" gui-text="Units:" gui-description="Unit used when segment lengths are written out.">
+                <option value="mm">mm</option>
+                <option value="cm">cm</option>
+                <option value="in">in</option>
+                <option value="px">px</option>
+                <option value="pt">pt</option>
+            </param>
+            <param indent="1" name="text_size" type="float" min="1" max="1000" precision="1" gui-text="Text size (px):" gui-description="Height of the debug text, in pixels.">10</param>
+            <param indent="1" name="text_offset" type="float" min="0" max="1000" precision="1" gui-text="Text offset (px):" gui-description="Gap between the curve and the nearest side of the label, in pixels. Positive is outside the fill, on both paths.">12</param>
+            <param indent="1" name="text_alignment" type="optiongroup" appearance="combo" gui-text="Text alignment:" gui-description="Orientation of node numbers and segment lengths. Rotation follows the numbers, from 1 toward 2. With -90°, the top of a label points back toward the lower number.">
+                <option value="horizontal">Horizontal</option>
+                <option value="along">Along the curve</option>
+                <option value="along-90">Along the curve, -90°</option>
+            </param>
+        </page>
+        <page name="help" gui-text="Help">
+            <label>Select the spacing path and the curve together. The open path with exactly two nodes is the curve. The other path supplies the distances, measured along the path rather than as straight chords.</label>
+            <label>Measure spacing from chooses which end of the spacing path is zero. Add nodes on the curve from chooses which end receives the first distance. Choosing the curve's last node reverses that curve, so its old last node becomes the first node. The spacing path is not edited.</label>
+            <label>If the curve is shorter than a distance, that node is skipped. Proportional mode scales the distances so they all fit. Shapes need Object, Object to Path first. Paths with more than one subpath need Path, Break Apart.</label>
+            <label>Live preview is the checkbox at the bottom of this dialog. Cancel discards it.</label>
+            <label>Number nodes and Segment lengths draw a separate group on each path. Run again with both unchecked to remove those groups. Hover a control to see a shorter tip.</label>
+        </page>
+    </param>
+    <effect needs-live-preview="true">
+        <object-type>path</object-type>
+        <effects-menu>
+            <submenu name="Modify Path"/>
+        </effects-menu>
+    </effect>
+    <script>
+        <command location="inx" interpreter="python">transfer-node-spacing.py</command>
+    </script>
+</inkscape-extension>
